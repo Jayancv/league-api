@@ -18,3 +18,4 @@ REST API for the Basketball league Management System
 
 
 
+postman collection : https://www.getpostman.com/collections/6e74fdbdfcb1fca50ceb
