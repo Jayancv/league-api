@@ -61,6 +61,7 @@ class MatchSerializer(serializers.Serializer):
     teamB_id = serializers.IntegerField(required=True)
     winner_id = serializers.IntegerField(required=False, allow_null=True)
     teamA_score = serializers.DecimalField(read_only=True,required=False, max_digits=10, decimal_places=4)
+    teamB_score = serializers.DecimalField(read_only=True,required=False, max_digits=10, decimal_places=4)
 
     def create(self, validated_data):
         new_mark = Match.objects.create(name=validated_data['name'],

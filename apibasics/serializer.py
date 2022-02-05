@@ -137,6 +137,9 @@ class PlayerSerializer(serializers.Serializer):
 
         return instance
 
+class PlayerBasicSerializer(serializers.Serializer):
+    user_details = UniqueDetailsSerializer(source='user')
+
 
 class AdminSerializer(serializers.Serializer):
     user_details = UserSerializer(source='user')

@@ -37,7 +37,35 @@ class PlayerScoresListView(APIView):
         serializer = PlayerScoreSerializer(matches_list, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def post(self, request, player_id):
+    # def post(self, request, player_id):
+    #     """
+    #     Adding a player to a match
+    #     """
+    #     serializer = PlayerScoreAddSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response({'detail': 'player assigned successfully'}, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PlayersScoreListView(APIView):
+    """
+    API endpoint that allows match players to be viewed or create.
+    Can use to add players to match
+    """
+    permission_classes = (
+        permissions.isAuthenticated, (permissions.isAdmin | (permissions.isCoach & permissions.isSameTeam)),)
+
+    def get(self, request):
+        """
+        Get a list of players with there scores in each match
+        """
+        matches_list = []
+        matches = MatchPlayer.objects.all()
+        serializer = PlayerScoreSerializer(matches, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
         """
         Adding a player to a match
         """
@@ -67,9 +95,38 @@ class TeamScoresListView(APIView):
         serializer = TeamScoreSerializer(matches_list, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def post(self, request, team_id):
+    # def post(self, request, team_id):
+    #     """
+    #     Assign a team to a match
+    #     """
+    #     serializer = TeamScoreAddSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response({'detail': 'Team assigned successfully'}, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class TeamsScoreListView(APIView):
+    """
+    API endpoint that allows match players to be viewed or create.
+    Can use to add players to match
+    """
+    permission_classes = (
+        permissions.isAuthenticated, (permissions.isAdmin | (permissions.isCoach & permissions.isSameTeam)),)
+
+    def get(self, request):
         """
-        Assign a team to a match
+        Get a list of players with there scores in each match
+        """
+        matches_list = []
+        matches = MatchTeam.objects.all()
+        serializer = TeamScoreSerializer(matches, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        """
+        Adding a player to a match
         """
         serializer = TeamScoreAddSerializer(data=request.data)
         if serializer.is_valid():

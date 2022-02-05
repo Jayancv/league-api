@@ -18,3 +18,8 @@ class TeamSerializer(serializers.Serializer):
         instance.name = validated_data.get('name', instance.name)
         instance.save()
         return instance
+
+
+class TeamBasicSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(required=True)

@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from apibasics.models import Coach, Player, User, Admin
-from apibasics.serializer import UserSerializer, CoachSerializer, PlayerSerializer, GroupSerializer, PlayerWithAvg, \
+from apibasics.serializer import CoachSerializer, PlayerSerializer, GroupSerializer, PlayerWithAvg, \
     AccessTokenPairSerializer, UniqueDetailsSerializer, AdminSerializer
 from leagueapi import permissions
 
@@ -238,13 +238,27 @@ class TeamPlayerViewSet(APIView):
         """
         Get all players in the team
         """
-
+        percentile = request.query_params.get("percentile")
+        p = 0
+        if percentile is not None and percentile.isnumeric():
+             p = int(percentile)
         players_list = []
         players = Player.objects.select_related('team').filter(team_id=team_id)
+        team_avg = 0
+        count = 0
         for player in players:
-            players_list.append(player)
+            team_avg = team_avg + player.average_score
+            count = count + 1
+
+        percentile_avg = (team_avg / count) * p / 100
+        for player in players:
+            if player.average_score > percentile_avg:
+                players_list.append(player)
+
         serializer = PlayerSerializer(players_list, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 
 
 class TeamCoachViewSet(APIView):

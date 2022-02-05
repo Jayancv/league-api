@@ -1,10 +1,12 @@
 from rest_framework import serializers
 
 from apibasics.models import Player
+from apibasics.serializer import PlayerSerializer, PlayerBasicSerializer
 from game.models import Match
 from game.serializer import MatchSerializer
 from participant.models import MatchPlayer, MatchTeam
 from team.models import Team
+from team.serializer import TeamSerializer, TeamBasicSerializer
 
 
 class MatchPlayerSerializer(serializers.ModelSerializer):
@@ -52,6 +54,7 @@ class PlayerScoreAddSerializer(serializers.Serializer):
 class PlayerScoreSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     match = MatchSerializer()
+    player = PlayerBasicSerializer()
     score = serializers.DecimalField(decimal_places=1, max_digits=19)
 
     def update(self, instance, validated_data):
@@ -99,6 +102,7 @@ class TeamScoreAddSerializer(serializers.Serializer):
 class TeamScoreSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     match = MatchSerializer()
+    team = TeamBasicSerializer()
     bonus_score = serializers.DecimalField(decimal_places=2, max_digits=5)
 
     def update(self, instance, validated_data):
