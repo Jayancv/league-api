@@ -1,0 +1,390 @@
+[
+	{
+		"model": "auth.group",
+		"fields": {
+			"name": "admin",
+			"permissions": [
+				29,
+				45,
+				46,
+				47,
+				48
+			]
+		}
+	},
+	{
+		"model": "auth.group",
+		"fields": {
+			"name": "player",
+			"permissions": [
+				29,
+				45,
+				46,
+				47,
+				48
+			]
+		}
+	},
+	{
+		"model": "auth.group",
+		"fields": {
+			"name": "coach",
+			"permissions": [
+				29,
+				45,
+				46,
+				47,
+				48
+			]
+		}
+	},
+  {
+		"model": "team.team",
+		"pk": 1,
+		"fields": {
+			"name": "LON"
+		}
+	},
+	{
+		"model": "team.team",
+		"pk": 2,
+		"fields": {
+			"name": "PAR"
+		}
+	},
+	{
+		"model": "team.team",
+		"pk": 3,
+		"fields": {
+			"name": "SYD"
+		}
+	},
+	{
+		"model": "team.team",
+		"pk": 4,
+		"fields": {
+			"name": "NYC"
+		}
+	},
+	{
+		"model": "team.team",
+		"pk": 5,
+		"fields": {
+			"name": "BNE"
+		}
+	},
+	{
+		"model": "team.team",
+		"pk": 6,
+		"fields": {
+			"name": "WAS"
+		}
+	},
+	{
+		"model": "team.team",
+		"pk": 7,
+		"fields": {
+			"name": "DXB"
+		}
+	},
+	{
+		"model": "team.team",
+		"pk": 8,
+		"fields": {
+			"name": "BER"
+		}
+	},
+	{
+		"model": "team.team",
+		"pk": 9,
+		"fields": {
+			"name": "TOY"
+		}
+	},
+	{
+		"model": "team.team",
+		"pk": 10,
+		"fields": {
+			"name": "MOW"
+		}
+	},
+	{
+		"model": "team.team",
+		"pk": 11,
+		"fields": {
+			"name": "DEL"
+		}
+	},
+	{
+		"model": "team.team",
+		"pk": 12,
+		"fields": {
+			"name": "SIN"
+		}
+	},
+	{
+		"model": "team.team",
+		"pk": 13,
+		"fields": {
+			"name": "CPT"
+		}
+	},
+	{
+		"model": "team.team",
+		"pk": 14,
+		"fields": {
+			"name": "BJS"
+		}
+	},
+	{
+		"model": "team.team",
+		"pk": 15,
+		"fields": {
+			"name": "MAD"
+		}
+	},
+	{
+		"model": "team.team",
+		"pk": 16,
+		"fields": {
+			"name": "ATH"
+		}
+	},
+
+  {
+		"model": "game.tournament",
+		"pk": 1,
+		"fields": {
+			"name": "2022",
+			"code": "T1",
+			"description": "New game in 2022",
+			"from_date": "2022-01-07",
+			"to_date": "2022-02-07"
+		}
+	},
+	{
+		"model": "game.match",
+		"pk": 1,
+		"fields": {
+			"name": "2022-1",
+			"from_date": "2022-01-01",
+			"to_date": "2022-01-01",
+			"tournament": 1,
+			"level": "1",
+			"status": "0",
+			"teamA": 1,
+			"teamB": 2,
+			"winner": null
+		}
+	},
+	{
+		"model": "game.match",
+		"pk": 2,
+		"fields": {
+			"name": "2022-2",
+			"from_date": "2022-01-02",
+			"to_date": "2022-01-02",
+			"tournament": 1,
+			"level": "1",
+			"status": "0",
+			"teamA": 3,
+			"teamB": 4,
+			"winner": null
+		}
+	},
+	{
+		"model": "game.match",
+		"pk": 3,
+		"fields": {
+			"name": "2022-3",
+			"from_date": "2022-01-03",
+			"to_date": "2022-01-03",
+			"tournament": 1,
+			"level": "1",
+			"status": "0",
+			"teamA": 5,
+			"teamB": 6,
+			"winner": null
+		}
+	},
+	{
+		"model": "game.match",
+		"pk": 4,
+		"fields": {
+			"name": "2022-4",
+			"from_date": "2022-01-04",
+			"to_date": "2022-01-04",
+			"tournament": 1,
+			"level": "1",
+			"status": "0",
+			"teamA": 7,
+			"teamB": 8,
+			"winner": null
+		}
+	},
+	{
+		"model": "game.match",
+		"pk": 5,
+		"fields": {
+			"name": "2022-5",
+			"from_date": "2022-01-05",
+			"to_date": "2022-01-05",
+			"tournament": 1,
+			"level": "1",
+			"status": "0",
+			"teamA": 9,
+			"teamB": 10,
+			"winner": null
+		}
+	},
+	{
+		"model": "game.match",
+		"pk": 6,
+		"fields": {
+			"name": "2022-6",
+			"from_date": "2022-01-06",
+			"to_date": "2022-01-06",
+			"tournament": 1,
+			"level": "1",
+			"status": "0",
+			"teamA": 11,
+			"teamB": 12,
+			"winner": null
+		}
+	},
+	{
+		"model": "game.match",
+		"pk": 7,
+		"fields": {
+			"name": "2022-7",
+			"from_date": "2022-01-07",
+			"to_date": "2022-01-07",
+			"tournament": 1,
+			"level": "1",
+			"status": "0",
+			"teamA": 13,
+			"teamB": 14,
+			"winner": null
+		}
+	},
+	{
+		"model": "game.match",
+		"pk": 8,
+		"fields": {
+			"name": "2022-8",
+			"from_date": "2022-01-08",
+			"to_date": "2022-01-08",
+			"tournament": 1,
+			"level": "1",
+			"status": "0",
+			"teamA": 15,
+			"teamB": 16,
+			"winner": null
+		}
+	},
+	{
+		"model": "game.match",
+		"pk": 9,
+		"fields": {
+			"name": "2022-9",
+			"from_date": "2022-01-09",
+			"to_date": "2022-01-09",
+			"tournament": 1,
+			"level": "2",
+			"status": "0",
+			"teamA": 1,
+			"teamB": 3,
+			"winner": null
+		}
+	},
+	{
+		"model": "game.match",
+		"pk": 10,
+		"fields": {
+			"name": "2022-10",
+			"from_date": "2022-01-10",
+			"to_date": "2022-01-10",
+			"tournament": 1,
+			"level": "2",
+			"status": "0",
+			"teamA": 5,
+			"teamB": 7,
+			"winner": null
+		}
+	},
+	{
+		"model": "game.match",
+		"pk": 11,
+		"fields": {
+			"name": "2022-11",
+			"from_date": "2022-01-11",
+			"to_date": "2022-01-11",
+			"tournament": 1,
+			"level": "2",
+			"status": "0",
+			"teamA": 9,
+			"teamB": 11,
+			"winner": null
+		}
+	},
+	{
+		"model": "game.match",
+		"pk": 12,
+		"fields": {
+			"name": "2022-12",
+			"from_date": "2022-01-12",
+			"to_date": "2022-01-12",
+			"tournament": 1,
+			"level": "2",
+			"status": "0",
+			"teamA": 13,
+			"teamB": 15,
+			"winner": null
+		}
+	},
+	{
+		"model": "game.match",
+		"pk": 13,
+		"fields": {
+			"name": "2022-13",
+			"from_date": "2022-01-15",
+			"to_date": "2022-01-15",
+			"tournament": 1,
+			"level": "3",
+			"status": "0",
+			"teamA": 3,
+			"teamB": 5,
+			"winner": null
+		}
+	},
+	{
+		"model": "game.match",
+		"pk": 14,
+		"fields": {
+			"name": "2022-14",
+			"from_date": "2022-01-16",
+			"to_date": "2022-01-16",
+			"tournament": 1,
+			"level": "3",
+			"status": "0",
+			"teamA": 7,
+			"teamB": 15,
+			"winner": null
+		}
+	},
+	{
+		"model": "game.match",
+		"pk": 15,
+		"fields": {
+			"name": "2022-15",
+			"from_date": "2022-01-18",
+			"to_date": "2022-01-18",
+			"tournament": 1,
+			"level": "4",
+			"status": "0",
+			"teamA": 5,
+			"teamB": 15,
+			"winner": null
+		}
+	}
+]
