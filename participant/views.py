@@ -24,7 +24,7 @@ class PlayerScoresListView(APIView):
     Can use to add players to match
     """
     permission_classes = (
-        permissions.isAuthenticated, permissions.isAdmin | (permissions.isCoach | permissions.isSameTeam,))
+        permissions.isAuthenticated, (permissions.isAdmin | (permissions.isCoach & permissions.isSameTeam)),)
 
     def get(self, request, player_id):
         """
@@ -54,7 +54,7 @@ class TeamScoresListView(APIView):
     Can use to add teams to match
     """
     permission_classes = (
-        permissions.isAuthenticated, permissions.isAdmin | (permissions.isCoach | permissions.isSameTeam,))
+        permissions.isAuthenticated, (permissions.isAdmin | (permissions.isCoach & permissions.isSameTeam)),)
 
     def get(self, request, team_id):
         """

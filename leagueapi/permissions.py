@@ -1,4 +1,8 @@
+from typing import re
+
 from rest_framework.permissions import IsAuthenticated, SAFE_METHODS, BasePermission
+
+from apibasics.models import Coach
 
 
 class isAuthenticated(IsAuthenticated):
@@ -7,7 +11,16 @@ class isAuthenticated(IsAuthenticated):
     """
 
     def has_permission(self, request, view):
+        is_authenticated = bool(request.user and request.user.is_authenticated)
+        return is_authenticated
 
+
+class isRestricted(IsAuthenticated):
+    """
+    Grants access to non restricted critical operations
+    """
+
+    def has_permission(self, request, view):
         is_authenticated = bool(request.user and request.user.is_authenticated)
 
         if is_authenticated:
@@ -49,7 +62,7 @@ class isAdmin(BasePermission):
     """
 
     def has_permission(self, request, view):
-        has_permission = request.user.groups.filter(name='admins').exists() | request.user.is_superuser
+        has_permission = (request.user.groups.filter(name='admins').exists() | request.user.is_superuser)
         return has_permission
 
 
@@ -60,4 +73,15 @@ class isSameTeam(BasePermission):
 
     def has_permission(self, request, view):
         # TODO
+        # user_id = request.user.id
+        # team_id = request.query_params.get('team_id')
+        # coach = Coach.objects.get(user_id=user_id)
+        # print(dir(request))
+        print(request.args)
+        #
+        #
+        # if coach is not None:
+        #     if team_id == coach.team_id:
+        #         return True
+        # return False
         return True

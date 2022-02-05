@@ -4,7 +4,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from game.models import Tournament, Match
-from game.serializer import MatchSerializer, TournamentSerializer, TournamentUpdateSerializer, MatchUpdateSerializer
+from game.serializer import MatchSerializer, TournamentSerializer, TournamentUpdateSerializer, MatchUpdateSerializer, \
+     TournamentSerializerModal
 from leagueapi import permissions
 
 
@@ -12,15 +13,15 @@ class TournamentListViewSet(APIView):
     """
     API endpoint that allows Tournaments to be viewed or created.
     """
-    permission_classes = (permissions.IsAuthenticated, permissions.isAdmin)
+    permission_classes = (permissions.isAuthenticated, permissions.isAdmin)
     serializer_class = TournamentSerializer
 
     def get(self, request):
         """
         Get all Tournament details
         """
-        teams = Tournament.objects.all()
-        serializer = TournamentSerializer(teams, many=True)
+        tournaments = Tournament.objects.all()
+        serializer = TournamentSerializer(tournaments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
@@ -38,7 +39,7 @@ class TournamentViewSet(APIView):
     """
     API endpoint that allows to be viewed or edited single Tournament.
     """
-    permission_classes = (permissions.isAuthenticated | permissions.isAdmin,)
+    permission_classes = (permissions.isAuthenticated , permissions.isAdmin,)
     serializer_class = TournamentSerializer
 
     def get(self, request, tou_id):
@@ -76,7 +77,7 @@ class MatchListViewSet(APIView):
     """
     API endpoint that allows Matches to be viewed or edited.
     """
-    permission_classes = (permissions.IsAuthenticated, permissions.isAdmin)
+    permission_classes = (permissions.IsAuthenticated, permissions.isAdmin,)
     serializer_class = MatchSerializer
 
     def get(self, request):
@@ -102,7 +103,7 @@ class MatchViewSet(APIView):
     """
     API endpoint that allows to be viewed or edited single match.
     """
-    permission_classes = (permissions.isAuthenticated, permissions.isAdmin)
+    permission_classes = (permissions.isAuthenticated, permissions.isAdmin,)
     serializer_class = MatchSerializer
 
     def get(self, request, match_id):
@@ -134,3 +135,17 @@ class MatchViewSet(APIView):
         team.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ScoreBoardViewSet(APIView):
+    permission_classes = (permissions.isAuthenticated, )
+    serializer_class = TournamentSerializerModal
+
+    def get(self, request,tou_id):
+        """
+        Get all Tournament details
+        """
+        teams = Tournament.objects.all()
+        matches = Match.objects.select_related('tournament').filter(tournament_id=tou_id)
+        serializer = MatchSerializer(matches, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

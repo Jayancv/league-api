@@ -2,7 +2,7 @@ from django.contrib.auth.models import Group
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from apibasics.models import User, Coach, Player
+from apibasics.models import User, Coach, Player, Admin
 from game.serializer import MatchSerializer
 from team.models import Team
 
@@ -133,6 +133,38 @@ class PlayerSerializer(serializers.Serializer):
             instance.weight = validated_data.get('weight', instance.weight)
             instance.height = validated_data.get('height', instance.height)
             instance.team_id = validated_data.get('team_id', instance.team_id)
+            instance.save()
+
+        return instance
+
+
+class AdminSerializer(serializers.Serializer):
+    user_details = UserSerializer(source='user')
+    type = serializers.CharField(required=False, allow_null=True)
+
+    def create(self, validated_data):
+        new_user = User.objects.create_superuser(**validated_data['user'])
+        user_group = Group.objects.get(name='admin')
+        new_user.groups.add(user_group)
+        admin = Admin.objects.create(user_id=new_user.id,
+                                     type=validated_data['type'], )
+        return admin
+
+    def update(self, instance, validated_data):
+        user_details = validated_data.pop('user', None)
+        admin_details = validated_data
+
+        if user_details is not None:
+            user = User.objects.get(id=instance.user_id)
+            user.username = user_details.get('username', user.username)
+            user.set_password(user_details.get('password', user.password))
+            user.first_name = user_details.get('first_name', user.first_name)
+            user.last_name = user_details.get('last_name', user.last_name)
+            user.email = user_details.get('email', user.email)
+            user.save()
+
+        if admin_details is not None:
+            instance.birth_date = validated_data.get('type', instance.type)
             instance.save()
 
         return instance

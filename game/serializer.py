@@ -9,7 +9,7 @@ class MatchSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TournamentSerializer(serializers.ModelSerializer):
+class TournamentSerializerModal(serializers.ModelSerializer):
     class Meta:
         model = Tournament
         fields = '__all__'
@@ -60,6 +60,7 @@ class MatchSerializer(serializers.Serializer):
     teamA_id = serializers.IntegerField(required=True)
     teamB_id = serializers.IntegerField(required=True)
     winner_id = serializers.IntegerField(required=False, allow_null=True)
+    teamA_score = serializers.DecimalField(read_only=True,required=False, max_digits=10, decimal_places=4)
 
     def create(self, validated_data):
         new_mark = Match.objects.create(name=validated_data['name'],
@@ -99,3 +100,12 @@ class MatchUpdateSerializer(serializers.Serializer):
         instance.winner_id = validated_data.get('winner_id', instance.winner_id)
         instance.save()
         return instance
+
+# class ScoreBoardSerializer(serializers.Serializer):
+#     match_detail = MatchSerializer(source='match')
+#     id = serializers.IntegerField(read_only=True)
+#     name = serializers.CharField()
+#     code = serializers.CharField(required=True)
+#     description = serializers.CharField()
+#     from_date = serializers.DateField(required=True)
+#     to_date = serializers.DateField(required=True)

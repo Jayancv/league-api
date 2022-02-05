@@ -37,7 +37,7 @@ urlpatterns = [
     path('api/', include('apibasics.urls')),
     # path('participant/', include('participant.urls', namespace='participant')),
     # path('game/', include('game.urls')),
-    path('scoreboard/', include('game.urls')),
+    # path('scoreboard/', include('game.urls')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
 ]

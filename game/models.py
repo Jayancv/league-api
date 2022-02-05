@@ -4,6 +4,9 @@ from django.db import models
 # Create your models here.
 
 # The highest level of the game
+from django.db.models import Sum
+
+
 class Tournament(models.Model):
     name = models.CharField(max_length=255)
     code = models.CharField(max_length=100, unique=True)
@@ -36,10 +39,10 @@ class Match(models.Model):
     teamB = models.ForeignKey('team.Team', on_delete=models.CASCADE,  related_name='teamB', null=True)
     winner = models.ForeignKey('team.Team', on_delete=models.CASCADE,  related_name='winner', null=True)
 
-    # @property
-    # def teamA_score(self):
-    #     return self.mTeam.all().aggregate(Avg('score')).get('score__avg', 0.00)
-    #
+    @property
+    def teamA_score(self):
+        return self.team_match.all().filter(team=self.teamA).aggregate(Sum('bonus_score')).get('bonus_score__sum', 0.00)
+
     # @property
     # def teamB_score(self):
     #     return self.mplayer.all().aggregate(Count('score')).get('score__count', 0.00)

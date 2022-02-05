@@ -17,6 +17,12 @@ class User(AbstractUser):
     role = models.CharField(max_length=1, choices=CHOICES)
 
 
+# Admin role
+class Admin(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    type = models.CharField(null=True, max_length=256, default=None)
+
+
 # Coach role
 class Coach(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)

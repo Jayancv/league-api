@@ -5,26 +5,17 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from apibasics.models import Coach, Player, User
+from apibasics.models import Coach, Player, User, Admin
 from apibasics.serializer import UserSerializer, CoachSerializer, PlayerSerializer, GroupSerializer, PlayerWithAvg, \
-    AccessTokenPairSerializer, UniqueDetailsSerializer
+    AccessTokenPairSerializer, UniqueDetailsSerializer, AdminSerializer
 from leagueapi import permissions
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
 
 class UsersListView(APIView):
     """
     API endpoint that allows users to be viewed or create.
     """
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated, permissions.isAdmin)
 
     def get(self, request):
         users = User.objects.all()
@@ -32,13 +23,66 @@ class UsersListView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class CoachViewSet(viewsets.ModelViewSet):
+class AdminListView(APIView):
     """
-    API endpoint that allows coaches to be viewed or edited.
+    API endpoint that allows users to be viewed or create.
     """
-    queryset = Coach.objects.all()
-    serializer_class = CoachSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = (permissions.IsAuthenticated, permissions.isAdmin)
+
+    def get(self, request):
+        users = Admin.objects.all()
+        serializer = AdminSerializer(users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @transaction.atomic
+    def post(self, request):
+        """
+        Create new admin user
+        """
+        serializer = AdminSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AdminView(APIView):
+    """
+    API endpoint that allows to be viewed or edited a admin.
+    """
+    permission_classes = (permissions.isAuthenticated | permissions.isAdmin,)
+    serializer_class = AdminSerializer
+
+    def get(self, request, admin_id):
+        """
+        Get one admin
+        """
+        admin = Admin.objects.filter(user_id=admin_id)
+        serializer = AdminSerializer(admin, many=True)
+        if admin:  # checking if queryset is empty
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({'detail': 'not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def patch(self, request, admin_id):
+        """
+        Modify admin details
+        """
+        admin = Admin.objects.get(user_id=admin_id)
+        serializer = AdminSerializer(admin, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, admin_id):
+        """
+        Permanently delete a admin and their user details
+        """
+        admin = Admin.objects.get(user_id=admin_id)
+        user = User.objects.get(id=admin_id)
+        admin.delete()
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class CoachListView(APIView):
@@ -120,7 +164,7 @@ class PlayerListView(APIView):
     """
     API endpoint that allows Players to be viewed or create.
     """
-    permission_classes = (permissions.isAuthenticated, permissions.isCoach | permissions.isAdmin)
+    permission_classes = (permissions.isAuthenticated, (permissions.isCoach | permissions.isAdmin),)
     serializer_class = PlayerSerializer
 
     def get(self, request):
@@ -187,7 +231,7 @@ class TeamPlayerViewSet(APIView):
     API endpoint that allows to be viewed players in a Team.
     """
     permission_classes = (
-        permissions.isAuthenticated, permissions.isAdmin | (permissions.isCoach, permissions.isSameTeam))
+        permissions.isAuthenticated, (permissions.isAdmin | (permissions.isCoach & permissions.isSameTeam)),)
     serializer_class = PlayerSerializer
 
     def get(self, request, team_id):

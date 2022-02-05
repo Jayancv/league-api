@@ -6,7 +6,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from leagueapi import permissions
-from participant.models import MatchPlayer, MatchTeam
 from team.models import Team
 from team.serializer import TeamSerializer
 
@@ -42,7 +41,7 @@ class TeamListViewSet(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class TeamViewSet(APIView):
-    # permission_classes = (permissions.isAuthenticated | permissions.isAdmin,)
+    permission_classes = (permissions.isAuthenticated , permissions.isAdmin,)
     serializer_class = TeamSerializer
 
     def get(self, request, team_id):
