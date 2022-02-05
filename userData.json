@@ -1,0 +1,22 @@
+[{
+		"model": "apibasics.user",
+		"pk": 18,
+		"fields": {
+			"password": "pbkdf2_sha256$260000$G6ZX89kMJJtg4qIyQ4EWT6$pJrl0I99Af0l2RriVSnQYBKy7cIyQvlg+aeRXgT7vsY=",
+			"last_login": null,
+			"is_superuser": false,
+			"username": "coach4",
+			"first_name": "fsfs",
+			"last_name": "dfdf",
+			"email": "coach3@gf.fg",
+			"is_staff": false,
+			"is_active": true,
+			"date_joined": "2022-02-05T11:05:49.665Z",
+			"role": "",
+			"groups": [
+				3
+			],
+			"user_permissions": []
+		}
+	}
+  ]

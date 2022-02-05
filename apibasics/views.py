@@ -241,24 +241,26 @@ class TeamPlayerViewSet(APIView):
         percentile = request.query_params.get("percentile")
         p = 0
         if percentile is not None and percentile.isnumeric():
-             p = int(percentile)
+            p = int(percentile)
         players_list = []
-        players = Player.objects.select_related('team').filter(team_id=team_id)
+        players = Player.objects.select_related('team').filter(team_id=team_id).order_by('-user_id')
         team_avg = 0
-        count = 0
+        count = 1
         for player in players:
-            team_avg = team_avg + player.average_score
-            count = count + 1
+            if player.average_score is not None and player.average_score.isnumeric():
+                team_avg = team_avg + player.average_score
+                count = count + 1
 
         percentile_avg = (team_avg / count) * p / 100
         for player in players:
-            if player.average_score > percentile_avg:
+            if player.average_score is not None and player.average_score.isnumeric():
+                if player.average_score > percentile_avg:
+                    players_list.append(player)
+            else:
                 players_list.append(player)
 
         serializer = PlayerSerializer(players_list, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
 
 
 class TeamCoachViewSet(APIView):
@@ -276,31 +278,6 @@ class TeamCoachViewSet(APIView):
         coaches = Coach.objects.select_related('team').filter(team_id=team_id)
         for ch in coaches:
             players_list.append(ch)
-        serializer = PlayerSerializer(players_list, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class TeamPlayerPercentileViewSet(APIView):
-    permission_classes = (permissions.isAuthenticated, permissions.isCoach | permissions.isAdmin)
-    serializer_class = PlayerSerializer
-
-    def get(self, request, team_id, p):
-        """
-        Get all player with average score is in the 90 percentile across the team.
-        """
-
-        players_list = []
-        players = Player.objects.select_related('team').filter(team_id=team_id)
-        team_avg = 0
-        count = 0
-        for player in players:
-            team_avg = team_avg + player.average_score
-            count = count + 1
-
-        percentile_avg = (team_avg / count) * p / 100
-        for player in players:
-            if player.average_score > percentile_avg:
-                players_list.append(player)
         serializer = PlayerSerializer(players_list, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

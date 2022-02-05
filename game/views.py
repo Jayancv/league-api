@@ -138,7 +138,7 @@ class MatchViewSet(APIView):
 
 
 class ScoreBoardViewSet(APIView):
-    permission_classes = (permissions.isAuthenticated, (permissions.isAdmin | permissions.isCoach),)
+    permission_classes = (permissions.isAuthenticated, (permissions.isAdmin | permissions.isPlayer),)
     serializer_class = TournamentSerializerModal
 
     def get(self, request,tou_id):
